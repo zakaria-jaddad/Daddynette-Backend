@@ -3,7 +3,9 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
+	"os"
 
 	"github.com/gorilla/mux"
 )
@@ -26,7 +28,7 @@ func handleTestPost(w http.ResponseWriter, r *http.Request) {
 	day := r.FormValue("day-name")
 	dayExercises := GetDayExercises(day)
 	if dayExercises == nil {
-		writeJSON(w, http.StatusNotFound, FileTestsResponseError{Message: "Day not found"})
+		writeJSON(w, http.StatusOK, FileTestsResponseError{Message: day + " Day not found"})
 		return
 	}
 	response.Dayname = day
@@ -38,9 +40,23 @@ func handleTestPost(w http.ResponseWriter, r *http.Request) {
 			continue
 		}
 		defer file.Close()
+
 		filename := header.Filename
+		// save files under their paths
+		f, err := os.OpenFile("./cfiles/"+filename, os.O_WRONLY|os.O_CREATE, 0666)
+		if err != nil {
+			writeJSON(w, http.StatusOK, FileTestsResponseError{Message: "Couldn't save file " + filename})
+			return
+		}
+
+		io.Copy(f, file)
+
 		filesTests[filename] = []string{"ok", "ko"}
 		response.FilesTests = filesTests
+	}
+	if response.FilesTests == nil {
+		writeJSON(w, http.StatusOK, FileTestsResponseError{Message: "Got No File From " + day})
+		return
 	}
 	writeJSON(w, http.StatusOK, response)
 }
