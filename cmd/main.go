@@ -8,11 +8,6 @@ import (
 	"github.com/gorilla/mux"
 )
 
-type FileTestsResponse struct {
-	DayName  string
-	FileName string
-}
-
 func writeJSON(w http.ResponseWriter, status int, v any) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(status)
@@ -26,15 +21,27 @@ func handleTestPost(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 
 	response := FileTestsResponse{}
-	response.DayName = r.FormValue("day-name")
-	file, header, err := r.FormFile("itoa.c")
-	if err != nil {
-		panic(err)
-	}
-	defer file.Close()
+	filesTests := make(map[string][]string)
 
-	// response.FileName = strings.Split(header.Filename, ".")
-	response.FileName = header.Filename
+	day := r.FormValue("day-name")
+	dayExercises := GetDayExercises(day)
+	if dayExercises == nil {
+		writeJSON(w, http.StatusNotFound, FileTestsResponseError{Message: "Day not found"})
+		return
+	}
+	response.Dayname = day
+	response.Exercises = dayExercises
+
+	for _, val := range response.Exercises {
+		file, header, err := r.FormFile(val)
+		if err != nil {
+			continue
+		}
+		defer file.Close()
+		filename := header.Filename
+		filesTests[filename] = []string{"ok", "ko"}
+		response.FilesTests = filesTests
+	}
 	writeJSON(w, http.StatusOK, response)
 }
 
