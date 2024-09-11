@@ -6,6 +6,7 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"path/filepath"
 
 	"github.com/gorilla/mux"
 )
@@ -13,7 +14,6 @@ import (
 func writeJSON(w http.ResponseWriter, status int, v any) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(status)
-	fmt.Println(v)
 	return json.NewEncoder(w).Encode(v)
 }
 
@@ -23,7 +23,7 @@ func handleTestPost(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 
 	response := FileTestsResponse{}
-	filesTests := make(map[string][]string)
+	filesTests := make(map[string]interface{})
 
 	day := r.FormValue("day-name")
 	dayExercises := GetDayExercises(day)
@@ -42,17 +42,23 @@ func handleTestPost(w http.ResponseWriter, r *http.Request) {
 		defer file.Close()
 
 		filename := header.Filename
-		// save files under their paths
-		f, err := os.OpenFile("./cfiles/"+filename, os.O_WRONLY|os.O_CREATE, 0666)
+		if filepath.Ext(filename) != ".c" && filepath.Ext(filename) != ".h" {
+			writeJSON(w, http.StatusOK, FileTestsResponseError{Message: "Unseported file extension " + filename})
+			return
+		}
+		// save file
+		cFilepath := "./cfiles/" + filename
+		f, err := os.OpenFile(cFilepath, os.O_WRONLY|os.O_CREATE, 0666)
 		if err != nil {
 			writeJSON(w, http.StatusOK, FileTestsResponseError{Message: "Couldn't save file " + filename})
 			return
 		}
-
 		io.Copy(f, file)
 
-		filesTests[filename] = []string{"ok", "ko"}
+		// filesTests[filename] = []string{"ok", "ko"}
+		filesTests[filename] = testcFile(day, filename, cFilepath)
 		response.FilesTests = filesTests
+		os.Remove("./output.txt")
 	}
 	if response.FilesTests == nil {
 		writeJSON(w, http.StatusOK, FileTestsResponseError{Message: "Got No File From " + day})
