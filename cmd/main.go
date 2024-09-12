@@ -28,7 +28,7 @@ func handleTestPost(w http.ResponseWriter, r *http.Request) {
 	day := r.FormValue("day-name")
 	dayExercises := GetDayExercises(day)
 	if dayExercises == nil {
-		writeJSON(w, http.StatusOK, FileTestsResponseError{Message: day + " Day not found"})
+		writeJSON(w, http.StatusOK, FileTestsResponseError{Status: false, Message: day + " Day not found"})
 		return
 	}
 	response.Dayname = day
@@ -37,20 +37,23 @@ func handleTestPost(w http.ResponseWriter, r *http.Request) {
 	for _, val := range response.Exercises {
 		file, header, err := r.FormFile(val)
 		if err != nil {
+			filesTests[val] = map[string]string{"result": "", "status": "Nothing turned"}
+			response.FilesTests = filesTests
 			continue
 		}
-		defer file.Close()
 
 		filename := header.Filename
+		defer file.Close()
+
 		if filepath.Ext(filename) != ".c" && filepath.Ext(filename) != ".h" {
-			writeJSON(w, http.StatusOK, FileTestsResponseError{Message: "Unseported file extension " + filename})
+			writeJSON(w, http.StatusOK, FileTestsResponseError{Status: false, Message: "Unseported file extension " + filename})
 			return
 		}
 		// save file
 		cFilepath := "./cfiles/" + filename
 		f, err := os.OpenFile(cFilepath, os.O_WRONLY|os.O_CREATE, 0666)
 		if err != nil {
-			writeJSON(w, http.StatusOK, FileTestsResponseError{Message: "Couldn't save file " + filename})
+			writeJSON(w, http.StatusOK, FileTestsResponseError{Status: false, Message: "Couldn't save file " + filename})
 			return
 		}
 		io.Copy(f, file)
@@ -61,9 +64,10 @@ func handleTestPost(w http.ResponseWriter, r *http.Request) {
 		os.Remove("./output.txt")
 	}
 	if response.FilesTests == nil {
-		writeJSON(w, http.StatusOK, FileTestsResponseError{Message: "Got No File From " + day})
+		writeJSON(w, http.StatusOK, FileTestsResponseError{Status: false, Message: "Got No File From " + day})
 		return
 	}
+	response.Status = true
 	writeJSON(w, http.StatusOK, response)
 }
 
