@@ -1,8 +1,10 @@
 package main
 
 import (
+	"fmt"
 	"os"
 	"os/exec"
+	"strings"
 )
 
 var KO string = "exit status 1"
@@ -24,7 +26,8 @@ func removeFile(filepath string) error {
 func testcFile(day string, filename string, cFilepath string) map[string]interface{} {
 	tests := make(map[string]interface{})
 
-	testFilePath := "../ctests/" + day + "/" + "ft_putchar.test.c"
+	testFilePath := "../ctests/" + day + "/" + strings.Split(filename, ".c")[0] + ".test.c"
+	fmt.Println(testFilePath)
 	// Compile the C file
 	cmd := exec.Command("gcc", testFilePath)
 	err := cmd.Run()
