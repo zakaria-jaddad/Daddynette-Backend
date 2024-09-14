@@ -1,11 +1,11 @@
-#include "../../cmd/cfiles/ft_putchar.c"
+#include "../../cmd/cfiles/ft_is_negative.c"
 #include <fcntl.h>
 #include <stdio.h>
 #include <string.h>
 
 typedef struct s_test {
   char *desc;
-  char c;
+  int n;
   char *expected;
 } t_test;
 
@@ -13,16 +13,13 @@ int run_tests(t_test *tests, int count);
 
 int main(void) {
   t_test tests[] = {
-      {.desc = "ft_putchar('c')", .c = 'c', .expected = "c"},
-      {.desc = "ft_putchar('x')", .c = 'x', .expected = "x"},
-      {.desc = "ft_putchar(' ')", .c = ' ', .expected = " "},
-      {.desc = "ft_putchar('\\n')", .c = '\n', .expected = "\n"},
-      {.desc = "ft_putchar('\\t')", .c = '\t', .expected = "\t"},
-      {.desc = "ft_putchar('\\0')", .c = '\0', .expected = "\0"},
-      {.desc = "ft_putchar('1')", .c = '1', .expected = "1"},
-      {.desc = "ft_putchar('3')", .c = '3', .expected = "3"},
-      {.desc = "ft_putchar('3')", .c = '3', .expected = "3"},
-      {.desc = "ft_putchar('7')", .c = '7', .expected = "7"},
+      {.desc = "ft_is_negative(8)", .n = 8, .expected = "P"},
+      {.desc = "ft_is_negative(-115)", .n = -115, .expected = "N"},
+      {.desc = "ft_is_negative(-2147483648)",
+       .n = -2147483648,
+       .expected = "N"},
+      {.desc = "ft_is_negative(0)", .n = 0, .expected = "P"},
+      {.desc = "ft_is_negative(2147483647)", .n = 2147483647, .expected = "P"}
       // Add more test cases here
   };
   int count = sizeof(tests) / sizeof(tests[0]);
@@ -50,7 +47,7 @@ int run_tests(t_test *tests, int count) {
     close(output_fd);
 
     // Call the function to be tested
-    ft_putchar(tests[i].c);
+    ft_is_negative(tests[i].n);
 
     // Restore the original output
     fflush(stdout);
@@ -68,10 +65,9 @@ int run_tests(t_test *tests, int count) {
              tests[i].expected, buffer);
       error -= 1;
     } else {
-      printf(":) | [%d] %s Output \"%s\" As expected\n", i + 1, tests[i].desc,
+      printf(":) | [%d] %s Output \"%s\" as expected\n", i + 1, tests[i].desc,
              buffer);
     }
-
     // Delete the output file
     remove("output.txt");
   }

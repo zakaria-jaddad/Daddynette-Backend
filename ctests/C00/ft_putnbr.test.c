@@ -1,11 +1,12 @@
-#include "../../cmd/cfiles/ft_putchar.c"
+#include "../../cmd/cfiles/ft_putnbr.c"
 #include <fcntl.h>
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h>
 
 typedef struct s_test {
   char *desc;
-  char c;
+  int n;
   char *expected;
 } t_test;
 
@@ -13,27 +14,24 @@ int run_tests(t_test *tests, int count);
 
 int main(void) {
   t_test tests[] = {
-      {.desc = "ft_putchar('c')", .c = 'c', .expected = "c"},
-      {.desc = "ft_putchar('x')", .c = 'x', .expected = "x"},
-      {.desc = "ft_putchar(' ')", .c = ' ', .expected = " "},
-      {.desc = "ft_putchar('\\n')", .c = '\n', .expected = "\n"},
-      {.desc = "ft_putchar('\\t')", .c = '\t', .expected = "\t"},
-      {.desc = "ft_putchar('\\0')", .c = '\0', .expected = "\0"},
-      {.desc = "ft_putchar('1')", .c = '1', .expected = "1"},
-      {.desc = "ft_putchar('3')", .c = '3', .expected = "3"},
-      {.desc = "ft_putchar('3')", .c = '3', .expected = "3"},
-      {.desc = "ft_putchar('7')", .c = '7', .expected = "7"},
+      {.desc = "ft_putnbr(0)", .n = 0, .expected = "0"},
+      {.desc = "ft_putnbr(-2147483648)",
+       .n = -2147483648,
+       .expected = "-2147483648"},
+      {.desc = "ft_putnbr(2147483647)",
+       .n = 2147483647,
+       .expected = "2147483647"},
+      {.desc = "ft_putnbr(42)", .n = 42, .expected = "42"},
+      {.desc = "ft_putnbr(-42)", .n = -42, .expected = "-42"},
       // Add more test cases here
   };
   int count = sizeof(tests) / sizeof(tests[0]);
-
   return (run_tests(tests, count));
 }
 
 int run_tests(t_test *tests, int count) {
   int i;
   int error = 0;
-
   for (i = 0; i < count; i++) {
     // Flush the standard output buffer
     fflush(stdout);
@@ -50,7 +48,7 @@ int run_tests(t_test *tests, int count) {
     close(output_fd);
 
     // Call the function to be tested
-    ft_putchar(tests[i].c);
+    ft_putnbr(tests[i].n);
 
     // Restore the original output
     fflush(stdout);
@@ -64,12 +62,12 @@ int run_tests(t_test *tests, int count) {
 
     // Check that the output matches the expected value
     if (strcmp(buffer, tests[i].expected) != 0) {
-      printf(":( | [%d] %s Expected \"%s\" Got \"%s\"\n", i + 1, tests[i].desc,
-             tests[i].expected, buffer);
+      printf(":( | [%d] %s \nkExpected \"%s\" \nGot \"%s\"\n", i + 1,
+             tests[i].desc, tests[i].expected, buffer);
       error -= 1;
     } else {
-      printf(":) | [%d] %s Output \"%s\" As expected\n", i + 1, tests[i].desc,
-             buffer);
+      printf(":) | [%d] %s \nOutput \"%s\" \nAs expected\n", i + 1,
+             tests[i].desc, buffer);
     }
 
     // Delete the output file
