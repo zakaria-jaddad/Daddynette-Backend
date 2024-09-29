@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"os"
 	"os/exec"
 	"strings"
@@ -27,7 +26,6 @@ func testcFile(day string, filename string, cFilepath string) map[string]interfa
 	tests := make(map[string]interface{})
 
 	testFilePath := "../ctests/" + day + "/" + strings.Split(filename, ".c")[0] + ".test.c"
-	fmt.Println(testFilePath)
 	// Compile the C file
 	cmd := exec.Command("gcc", testFilePath)
 	err := cmd.Run()
