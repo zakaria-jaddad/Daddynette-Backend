@@ -60,23 +60,15 @@ int run_tests(t_test *tests, int count) {
 
     ft_swap(&x, &y);
 
-    /* // Check that the output matches the expected value */
-    /* if (strcmp(buffer, tests[i].expected) != 0) { */
-    /*   printf(":( | [%d] %s \nkExpected \"%s\" \nGot \"%s\"\n", i + 1, */
-    /*          tests[i].desc, tests[i].expected, buffer); */
-    /*   error -= 1; */
-    /* } else { */
-    /*   printf(":) | [%d] %s \nOutput \"%s\" \nAs expected\n", i + 1, */
-    /*          tests[i].desc, buffer); */
-    /* } */
-
     if (x != tests[i].expected_x || y != tests[i].expected_y) {
-      printf(":( | [%d] %s Expected x = %d, y = %d, Got x = %d, y = %d\n",
+      printf(":( | [%d] %s:\nExpected x = %d, y = %d, Got x = %d, y = %d\n",
              i + 1, tests[i].desc, tests[i].expected_x, tests[i].expected_y, x,
              y);
       error--;
     } else {
-      printf(":) | [%d] %s Passed\n", i + 1, tests[i].desc);
+      printf(":) | [%d] %s: x = %d, y = %d\nGot x = "
+             "%d, y = %d\n",
+             i + 1, tests[i].desc, tests[i].x, tests[i].y, x, y);
     }
   }
 

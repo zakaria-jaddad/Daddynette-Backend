@@ -24,15 +24,14 @@ int test1(void) {
   ft_div_mod(a, b, &x, &y);
 
   if (x != 2 || y != 0) {
-    printf(":( | [1] ft_div_mod(10, 5, &x, &y)\nExpected x = 2, Got %d. "
-           "Expected y = 0, Got %d\n",
+    printf(":( | [1] ft_div_mod(10, 5, &x, &y)\nExpected x = 2, y = 0 Got x = "
+           "%d y = %d\n",
            x, y);
     return (1);
   }
-  printf(
-      ":) | [1] ft_div_mod(10, 5, &x, &y)\nExpected x = 2, Got %d. Expected y "
-      "= 0, Got %d\n",
-      x, y);
+  printf(":) | [1] ft_div_mod(10, 5, &x, &y)\nExpected x = 2, y = 0 Got x = %d "
+         "y = %d\n",
+         x, y);
   return (0);
 }
 
@@ -47,15 +46,14 @@ int test2(void) {
   ft_div_mod(a, b, &x, &y);
 
   if (x != 4 || y != 1) {
-
-    printf(":( | [2] ft_div_mod(10, 5, &x, &y)\nExpected x = 4, Got %d. "
-           "Expected y = 1, Got %d\n",
-           x, y);
+    printf(
+        ":( | [2] ft_div_mod(25, 6, &x, &y)\nExpected x = 4, y = 1 Got x = %d "
+        "y = %d\n",
+        x, y);
     return (1);
   }
-  printf(":) | [2] ft_div_mod(10, 5, &x, &y)\nExpected x = 4, Got %d. "
-         "Expected y "
-         "= 1, Got %d\n",
+  printf(":) | [2] ft_div_mod(25, 6, &x, &y)\nExpected x = 4, y = 1 Got x = %d "
+         "y = %d\n",
          x, y);
   return (0);
 }
@@ -71,15 +69,14 @@ int test3(void) {
   ft_div_mod(a, b, &x, &y);
 
   if (x != 5 || y != 7) {
-
-    printf(":( | [2] ft_div_mod(10, 5, &x, &y)\nExpected x = 5, Got %d. "
-           "Expected y = 7, Got %d\n",
-           x, y);
+    printf(
+        ":( | [3] ft_div_mod(47, 8, &x, &y)\nExpected x = 5, y = 7 Got x = %d "
+        "y = %d\n",
+        x, y);
     return (1);
   }
-  printf(
-      ":) | [3] ft_div_mod(47, 8, &x, &y) Expected x = 5, Got %d. Expected y "
-      "= 7, Got %d\n",
-      x, y);
+  printf(":) | [3] ft_div_mod(47, 8, &x, &y)\nExpected x = 5, y = 7 Got x = %d "
+         "y = %d\n",
+         x, y);
   return (0);
 }

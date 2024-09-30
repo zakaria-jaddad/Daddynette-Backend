@@ -1,5 +1,4 @@
 #include "../../cmd/cfiles/ft_ultimate_div_mod.c"
-#include "../../../utils/constants.h"
 #include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -23,13 +22,13 @@ int test1(void) {
   ft_ultimate_div_mod(&x, &y);
 
   if (x != 5 || y != 0) {
-    printf(":( | [1] ft_ultimate_div_mod(x = 15, y = 3)\nExpected x = 5,"
-           "Got %d. Expected y = 0, Got %d\n",
+    printf(":( | [1] ft_ultimate_div_mod(x = 15, y = 3)\nExpected x = 5, y = 0 "
+           "Got x = %d y = %d\n",
            x, y);
     return (1);
   }
-  printf(":) | [1] ft_ultimate_div_mod(x = 15, y = 3)\nExpected x = 5, Got %d. "
-         "= 0, Got %d\n",
+  printf(":) | [1] ft_ultimate_div_mod(x = 15, y = 3)\nExpected x = 5, y = 0 "
+         "Got x = %d, y = %d\n",
          x, y);
   return (0);
 }
@@ -43,14 +42,14 @@ int test2(void) {
   ft_ultimate_div_mod(&x, &y);
 
   if (x != 4 || y != 3) {
-    printf(":( | [2] ft_ultimate_div_mod(x = 23, y = 5) Expected x = 4,"
-           "Got %d. Expected y = 3, Got %d\n",
+    printf(":( | [2] ft_ultimate_div_mod(x = 23, y = 5)\nExpected x = 4, y = 3 "
+           "Got x = %d, y = %d\n",
            x, y);
     return (1);
   }
 
-  printf(":) | [2] ft_ultimate_div_mod(x = 23, y = 5)\nExpected x = 4, Got %d. "
-         "Expected y = 3, got %d\n",
+  printf(":) | [2] ft_ultimate_div_mod(x = 23, y = 5)\nExpected x = 4, y = 3 "
+         "Got x = %d, y = %d\n",
          x, y);
   return (0);
 }
@@ -64,13 +63,13 @@ int test3(void) {
   ft_ultimate_div_mod(&x, &y);
 
   if (x != 6 || y != 2) {
-    printf(":( | [3] ft_ultimate_div_mod(x = 32, y = 5) Expected x = 6,"
-           "Got %d. Expected y = 2, Got %d\n",
+    printf(":( | [3] ft_ultimate_div_mod(x = 32, y = 5)\nExpected x = 6, y = 2 "
+           "Got x = %d, y = %d\n",
            x, y);
     return (1);
   }
-  printf(":) | [3] ft_ultimate_div_mod(x = 32, y = 5)\nExpected x = 6, Got %d. "
-         "Expected y = 2, got %d\n",
+  printf(":) | [3] ft_ultimate_div_mod(x = 32, y = 5)\nExpected x = 6, y = 2 "
+         "Got x = %d, y = %d\n",
          x, y);
   return (0);
 }
